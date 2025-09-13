@@ -42,65 +42,217 @@ def handle_request(client_socket, client_address):
         
         # 生成响应内容
         if path == '/' or path == '':
-            content = f"""<!DOCTYPE html>
+            content = """<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Python HTTP Server</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container { 
+            max-width: 800px; 
+            margin: 0 auto; 
+            background: white; 
+            padding: 30px; 
+            border-radius: 15px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        h1 { 
+            color: #333; 
+            text-align: center; 
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        .info-card { 
+            background: #f8f9ff; 
+            padding: 20px; 
+            margin: 20px 0; 
+            border-radius: 10px; 
+            border-left: 5px solid #667eea;
+        }
+        .api-section { 
+            background: #f0fff4; 
+            padding: 20px; 
+            margin: 20px 0; 
+            border-radius: 10px; 
+            text-align: center;
+        }
+        .btn { 
+            background: #667eea; 
+            color: white; 
+            padding: 12px 20px; 
+            text-decoration: none; 
+            border-radius: 25px; 
+            margin: 10px; 
+            display: inline-block;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        .btn:hover { 
+            background: #5a67d8; 
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .status-item {
+            background: #e6fffa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #81e6d9;
+        }
+        @media (max-width: 600px) {
+            .container { 
+                margin: 10px; 
+                padding: 20px; 
+            }
+            h1 { 
+                font-size: 2em; 
+            }
+            .btn { 
+                display: block; 
+                margin: 10px 0; 
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Hello, World!</h1>
-    <p>Welcome to Python HTTP Server!</p>
-    <p>当前时间: {current_time}</p>
-    <p>您的IP地址: {client_ip}</p>
-    <p>请求路径: {path}</p>
-    <p>请求方法: {method}</p>
+    <div class="container">
+        <h1>🐍 Python HTTP Server 🚀</h1>
+        
+        <div class="info-card">
+            <h3>📊 连接信息</h3>
+            <p><strong>⏰ 当前时间:</strong> """ + current_time + """</p>
+            <p><strong>🌐 您的IP地址:</strong> """ + client_ip + """</p>
+            <p><strong>📍 请求路径:</strong> """ + path + """</p>
+            <p><strong>🔧 请求方法:</strong> """ + method + """</p>
+        </div>
+        
+        <div class="api-section">
+            <h3>🛠️ API 测试接口</h3>
+            <a href="/api/time" class="btn">⏱️ 获取服务器时间</a>
+            <a href="/api/hello" class="btn">👋 Hello API</a>
+            <a href="/api/status" class="btn">📊 服务器状态</a>
+        </div>
+        
+        <div class="status-grid">
+            <div class="status-item">
+                <h4>✅ 服务状态</h4>
+                <p>运行正常</p>
+            </div>
+            <div class="status-item">
+                <h4>⚡ 响应速度</h4>
+                <p>极速</p>
+            </div>
+            <div class="status-item">
+                <h4>🔧 协议版本</h4>
+                <p>HTTP/1.1</p>
+            </div>
+            <div class="status-item">
+                <h4>📝 编码</h4>
+                <p>UTF-8</p>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px; color: #666;">
+            <p>Powered by Python Socket Server ⚡</p>
+        </div>
+    </div>
 </body>
 </html>"""
             content_type = "text/html; charset=utf-8"
             
         elif path == '/api/time':
-            content = f'{{"time": "{current_time}", "client_ip": "{client_ip}", "timestamp": {time.time()}}}'
+            content = '{"time": "' + current_time + '", "client_ip": "' + client_ip + '", "timestamp": ' + str(time.time()) + '}'
             content_type = "application/json; charset=utf-8"
             
         elif path == '/api/hello':
-            content = f'{{"message": "Hello from Python!", "client_ip": "{client_ip}", "server_time": "{current_time}"}}'
+            content = '{"message": "Hello from Python! 👋", "client_ip": "' + client_ip + '", "server_time": "' + current_time + '"}'
+            content_type = "application/json; charset=utf-8"
+            
+        elif path == '/api/status':
+            content = '{"server": "Python Socket Server", "status": "running", "version": "1.0.0", "client_ip": "' + client_ip + '", "server_time": "' + current_time + '"}'
             content_type = "application/json; charset=utf-8"
             
         else:
-            content = f"""<!DOCTYPE html>
+            content = """<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>404 - 页面未找到</title>
     <style>
-        body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; margin: 20px; background: #f5f5f5; }}
-        .container {{ max-width: 600px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }}
-        h1 {{ color: #e74c3c; text-align: center; margin-bottom: 30px; }}
-        .error-card {{ background: #fdf2f2; padding: 15px; margin: 15px 0; border-radius: 6px; border-left: 4px solid #e74c3c; }}
-        .home-link {{ display: inline-block; background: #3498db; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; margin-top: 20px; }}
-        .home-link:hover {{ background: #2980b9; }}
-        .footer {{ text-align: center; margin-top: 30px; color: #7f8c8d; font-size: 12px; }}
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            min-height: 100vh;
+        }
+        .container { 
+            max-width: 600px; 
+            margin: 50px auto; 
+            background: white; 
+            padding: 30px; 
+            border-radius: 15px; 
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        h1 { 
+            color: #d63031; 
+            font-size: 3em; 
+            margin-bottom: 20px;
+        }
+        .error-info { 
+            background: #ffe0e0; 
+            padding: 20px; 
+            border-radius: 10px; 
+            margin: 20px 0;
+            border-left: 5px solid #d63031;
+        }
+        .btn { 
+            background: #0984e3; 
+            color: white; 
+            padding: 15px 30px; 
+            text-decoration: none; 
+            border-radius: 25px; 
+            display: inline-block;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+        .btn:hover { 
+            background: #74b9ff; 
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🚫 404 - 页面未找到</h1>
+        <h1>🚫 404</h1>
+        <h2>页面未找到</h2>
         
-        <div class="error-card">
-            <h3>❌ 错误信息</h3>
-            <p><strong>请求页面:</strong> {path}</p>
-            <p><strong>错误时间:</strong> {current_time}</p>
-            <p><strong>您的IP:</strong> {client_ip}</p>
+        <div class="error-info">
+            <p><strong>请求页面:</strong> """ + path + """</p>
+            <p><strong>错误时间:</strong> """ + current_time + """</p>
+            <p><strong>您的IP:</strong> """ + client_ip + """</p>
         </div>
         
-        <div style="text-align: center;">
-            <a href="/" class="home-link">🏠 返回首页</a>
-        </div>
+        <a href="/" class="btn">🏠 返回首页</a>
         
-        <div class="footer">
-            Python Socket Server - 404 Error
+        <div style="margin-top: 30px; color: #666;">
+            <small>Python Socket Server - 404 Error</small>
         </div>
     </div>
 </body>
@@ -112,9 +264,9 @@ def handle_request(client_socket, client_address):
         content_length = len(content_bytes)
         
         # 构建HTTP响应
-        if path.startswith('/api/') and path not in ['/api/time', '/api/hello']:
+        if path.startswith('/api/') and path not in ['/api/time', '/api/hello', '/api/status']:
             status_line = "HTTP/1.1 404 Not Found\r\n"
-        elif path not in ['/', '', '/api/time', '/api/hello']:
+        elif path not in ['/', '', '/api/time', '/api/hello', '/api/status']:
             status_line = "HTTP/1.1 404 Not Found\r\n"
         else:
             status_line = "HTTP/1.1 200 OK\r\n"
