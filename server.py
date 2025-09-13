@@ -34,6 +34,7 @@ class SimpleHTTPHandler(BaseHTTPRequestHandler):
     <div class="container">
         <h1>Python HTTP 服务器测试页面</h1>
         <p>服务器运行时间: """ + datetime.now().strftime('%Y-%m-%d %H:%M:%S') + """</p>
+        <p>您的客户端IP: """ + client_ip + """</p>
         
         <div class="api-test">
             <h2>API 测试</h2>
