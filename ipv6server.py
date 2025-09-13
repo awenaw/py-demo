@@ -74,35 +74,35 @@ def handle_request(client_socket, client_address):
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>404 - 页面未找到</title>
+    <style>
+        body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; margin: 20px; background: #f5f5f5; }}
+        .container {{ max-width: 600px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }}
+        h1 {{ color: #e74c3c; text-align: center; margin-bottom: 30px; }}
+        .error-card {{ background: #fdf2f2; padding: 15px; margin: 15px 0; border-radius: 6px; border-left: 4px solid #e74c3c; }}
+        .home-link {{ display: inline-block; background: #3498db; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; margin-top: 20px; }}
+        .home-link:hover {{ background: #2980b9; }}
+        .footer {{ text-align: center; margin-top: 30px; color: #7f8c8d; font-size: 12px; }}
+    </style>
 </head>
 <body>
-    <center>
+    <div class="container">
         <h1>🚫 404 - 页面未找到</h1>
-        <hr>
-        <h2>抱歉，请求的页面不存在</h2>
-        <br>
         
-        <table border="1" cellpadding="8" cellspacing="0">
-            <tr bgcolor="#ffe6e6">
-                <td><b>❌ 错误页面</b></td>
-                <td>{path}</td>
-            </tr>
-            <tr>
-                <td><b>⏰ 错误时间</b></td>
-                <td>{current_time}</td>
-            </tr>
-            <tr bgcolor="#ffe6e6">
-                <td><b>🌐 您的IP</b></td>
-                <td>{client_ip}</td>
-            </tr>
-        </table>
+        <div class="error-card">
+            <h3>❌ 错误信息</h3>
+            <p><strong>请求页面:</strong> {path}</p>
+            <p><strong>错误时间:</strong> {current_time}</p>
+            <p><strong>您的IP:</strong> {client_ip}</p>
+        </div>
         
-        <br><br>
-        <p><a href="/">🏠 返回首页</a></p>
+        <div style="text-align: center;">
+            <a href="/" class="home-link">🏠 返回首页</a>
+        </div>
         
-        <hr>
-        <small><i>Python Socket Server - 404 Error</i></small>
-    </center>
+        <div class="footer">
+            Python Socket Server - 404 Error
+        </div>
+    </div>
 </body>
 </html>"""
             content_type = "text/html; charset=utf-8"
