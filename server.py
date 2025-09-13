@@ -8,6 +8,8 @@ import sys
 
 class SimpleHTTPHandler(BaseHTTPRequestHandler):
     def do_GET(self):
+        client_ip = self.client_address[0]
+        print(f"GET请求来自客户端: {client_ip} -> {self.path}")
         if self.path == '/':
             self.send_response(200)
             self.send_header('Content-type', 'text/html')
@@ -106,6 +108,8 @@ class SimpleHTTPHandler(BaseHTTPRequestHandler):
             self.send_error(404, 'Page not found')
     
     def do_POST(self):
+        client_ip = self.client_address[0]
+        print(f"POST请求来自客户端: {client_ip} -> {self.path}")
         if self.path == '/api/greet':
             content_length = int(self.headers.get('Content-Length', 0))
             post_data = self.rfile.read(content_length)
