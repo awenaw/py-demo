@@ -3,6 +3,8 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 import json
 import urllib.parse
 from datetime import datetime
+import socket
+import sys
 
 class SimpleHTTPHandler(BaseHTTPRequestHandler):
     def do_GET(self):
@@ -133,14 +135,48 @@ class SimpleHTTPHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(json.dumps(data, ensure_ascii=False).encode('utf-8'))
 
+class DualStackHTTPServer(HTTPServer):
+    address_family = socket.AF_INET6
+
+    def __init__(self, server_address, RequestHandlerClass, bind_and_activate=True):
+        super().__init__(server_address, RequestHandlerClass, bind_and_activate=False)
+
+        # 启用双栈模式 (IPv4 + IPv6)
+        self.socket.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_V6ONLY, 0)
+
+        if bind_and_activate:
+            try:
+                self.server_bind()
+                self.server_activate()
+            except Exception as e:
+                self.server_close()
+                raise e
+
 def run_server(port=8000):
-    server_address = ('0.0.0.0', port)
-    httpd = HTTPServer(server_address, SimpleHTTPHandler)
-    print(f'服务器启动在所有网络接口，端口 {port}')
-    print(f'本地访问: http://localhost:{port}/')
-    print(f'局域网访问: http://192.168.3.214:{port}/')
+    try:
+        # 尝试IPv6双栈服务器
+        server_address = ('::', port)
+        httpd = DualStackHTTPServer(server_address, SimpleHTTPHandler)
+        print(f'服务器启动在所有网络接口 (IPv4 + IPv6)，端口 {port}')
+        print(f'本地访问:')
+        print(f'  IPv4: http://localhost:{port}/')
+        print(f'  IPv6: http://[::1]:{port}/')
+        print(f'局域网访问:')
+        print(f'  IPv4: http://192.168.3.214:{port}/')
+        print(f'  IPv6: http://[您的IPv6地址]:{port}/')
+
+    except Exception as e:
+        # 如果IPv6失败，回退到IPv4
+        print(f'IPv6启动失败: {e}')
+        print('回退到IPv4模式...')
+        server_address = ('0.0.0.0', port)
+        httpd = HTTPServer(server_address, SimpleHTTPHandler)
+        print(f'服务器启动在所有IPv4接口，端口 {port}')
+        print(f'本地访问: http://localhost:{port}/')
+        print(f'局域网访问: http://192.168.3.214:{port}/')
+
     print('按 Ctrl+C 停止服务器')
-    
+
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:
