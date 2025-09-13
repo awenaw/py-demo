@@ -72,12 +72,37 @@ def handle_request(client_socket, client_address):
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>404 Not Found</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - 页面未找到</title>
 </head>
 <body>
-    <h1>404 Not Found</h1>
-    <p>页面未找到: {path}</p>
-    <p>时间: {current_time}</p>
+    <center>
+        <h1>🚫 404 - 页面未找到</h1>
+        <hr>
+        <h2>抱歉，请求的页面不存在</h2>
+        <br>
+        
+        <table border="1" cellpadding="8" cellspacing="0">
+            <tr bgcolor="#ffe6e6">
+                <td><b>❌ 错误页面</b></td>
+                <td>{path}</td>
+            </tr>
+            <tr>
+                <td><b>⏰ 错误时间</b></td>
+                <td>{current_time}</td>
+            </tr>
+            <tr bgcolor="#ffe6e6">
+                <td><b>🌐 您的IP</b></td>
+                <td>{client_ip}</td>
+            </tr>
+        </table>
+        
+        <br><br>
+        <p><a href="/">🏠 返回首页</a></p>
+        
+        <hr>
+        <small><i>Python Socket Server - 404 Error</i></small>
+    </center>
 </body>
 </html>"""
             content_type = "text/html; charset=utf-8"
