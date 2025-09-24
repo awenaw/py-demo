@@ -348,7 +348,7 @@ def start_server(host, port):
         print("\n服务器已停止")
 
 def main():
-    port = 8000
+    port = 900
     
     try:
         # 尝试IPv6双栈
