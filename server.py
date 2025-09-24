@@ -157,7 +157,7 @@ class DualStackHTTPServer(HTTPServer):
                 self.server_close()
                 raise e
 
-def run_server(port=8000):
+def run_server(port=10000):
     try:
         # 尝试IPv6双栈服务器
         server_address = ('::', port)
